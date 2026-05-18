@@ -1,11 +1,22 @@
 // PersonalClipboard.cpp
 // compile with: /D_UNICODE /DUNICODE /DWIN32 /D_WINDOWS /c
-// Sample code from https://learn.microsoft.com/en-us/cpp/windows/walkthrough-creating-windows-desktop-applications-cpp?view=msvc-170
+// Sample code sources:
+// Window creation:
+// https://learn.microsoft.com/en-us/cpp/windows/walkthrough-creating-windows-desktop-applications-cpp?view=msvc-170
+// Context menu creation:
+// https://www.equestionanswers.com/vcpp/popup-menu-context-menu.php
 
 #include <windows.h>
 #include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
+#include <WinUser.h>
+#include <stdio.h>
+ /* Context Menu IDs */
+#define IDM_CONTEXT_LINE   1000
+#define IDM_CONTEXT_RECTAN 1001
+#define IDM_CONTEXT_CIRCLE 1002
+#define IDM_CONTEXT_HELP   1003
 
 // Global variables
 
@@ -13,7 +24,7 @@
 static TCHAR szWindowClass[] = _T("DesktopApp");
 
 // The string that appears in the application's title bar.
-static TCHAR szTitle[] = _T("Windows Desktop Guided Tour Application");
+static TCHAR szTitle[] = _T("Personal Clipboard Application");
 
 // Stored instance handle for use in Win32 API calls such as FindResource
 HINSTANCE hInst;
@@ -47,7 +58,7 @@ int WINAPI WinMain(
     {
         MessageBox(NULL,
                    _T("Call to RegisterClassEx failed!"),
-                   _T("Windows Desktop Guided Tour"),
+                   _T("Personal Clipboard"),
                    NULL);
 
         return 1;
@@ -84,7 +95,7 @@ int WINAPI WinMain(
     {
         MessageBox(NULL,
                    _T("Call to CreateWindowEx failed!"),
-                   _T("Windows Desktop Guided Tour"),
+                   _T("Personal Clipboard"),
                    NULL);
 
         return 1;
@@ -123,6 +134,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_PAINT:
+    {
         hdc = BeginPaint(hWnd, &ps);
 
         // Here your application is laid out.
@@ -131,10 +143,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         TextOut(hdc,
                 5, 5,
                 greeting, _tcslen(greeting));
+        // Popup the context menu
+        POINT pt;
+        BOOL bReturn = GetCursorPos(&pt);
+        HMENU hMenuPopup = CreatePopupMenu();
+        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_LINE, _T("Line"));
+        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Rectangle"));
+        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CIRCLE, _T("Circle"));
+        AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
+        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_HELP, _T("Help"));
+        //pt.x = GET_X_LPARAM(lParam);
+        //pt.y = GET_Y_LPARAM(lParam);
+        if(bReturn == 0) //If GetCursorPos() encountered error
+        {
+            pt.x = 0;
+            pt.y = 0;
+        }
+        ClientToScreen(hWnd, &pt);
+        TrackPopupMenu(hMenuPopup,
+                       TPM_LEFTALIGN | TPM_RIGHTBUTTON,
+                       pt.x, pt.y, 0, hWnd, NULL);
+        DestroyMenu(hMenuPopup);
         // End application-specific layout section.
 
         EndPaint(hWnd, &ps);
-        break;
+        //break;
+    }
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
