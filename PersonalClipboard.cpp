@@ -17,6 +17,8 @@
 #define IDM_CONTEXT_RECTAN 1001
 #define IDM_CONTEXT_CIRCLE 1002
 #define IDM_CONTEXT_HELP   1003
+/* Context Menu items enumeration */
+enum MenuItems { Line, Square, Circle, Help };
 
 // Global variables
 
@@ -148,12 +150,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         BOOL bReturn = GetCursorPos(&pt);
         HMENU hMenuPopup = CreatePopupMenu();
         AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_LINE, _T("Line"));
-        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Rectangle"));
+        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Square"));
         AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CIRCLE, _T("Circle"));
         AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
         AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_HELP, _T("Help"));
-        //pt.x = GET_X_LPARAM(lParam);
-        //pt.y = GET_Y_LPARAM(lParam);
+
         if(bReturn == 0) //If GetCursorPos() encountered error
         {
             pt.x = 0;
@@ -168,6 +169,33 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         EndPaint(hWnd, &ps);
         //break;
+    }
+    case WM_COMMAND:
+    {
+        if (wParam >= IDM_CONTEXT_LINE && wParam <= IDM_CONTEXT_HELP)
+        {
+            int menuItemIndex = wParam - IDM_CONTEXT_LINE;
+            const char* menuItem = "";
+            LPCWSTR msg = _T("");
+            switch (menuItemIndex)
+            {
+                case MenuItems::Line:
+                msg = _T("Clicked on Line");
+                break;
+            case MenuItems::Square:
+                msg = _T("Clicked on Square");
+                break;
+            case MenuItems::Circle:
+                msg = _T("Clicked on Circle");
+                break;
+            case MenuItems::Help:
+                msg = _T("Clicked on Help");
+                break;
+            }
+            MessageBoxW(hWnd, (LPCWSTR)msg, _T("Popup Menu"), MB_OK);
+        }
+        DefWindowProc(hWnd, message, wParam, lParam);
+        break;
     }
     case WM_DESTROY:
         PostQuitMessage(0);
