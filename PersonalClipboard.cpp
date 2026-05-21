@@ -16,9 +16,9 @@
 #define IDM_CONTEXT_LINE   1000
 #define IDM_CONTEXT_RECTAN 1001
 #define IDM_CONTEXT_CIRCLE 1002
-#define IDM_CONTEXT_HELP   1003
+#define IDM_CONTEXT_CLOSE   1003
 /* Context Menu items enumeration */
-enum MenuItems { Line, Square, Circle, Help };
+enum MenuItems { Line, Square, Circle, Close };
 
 // Global variables
 
@@ -106,9 +106,29 @@ int WINAPI WinMain(
     // The parameters to ShowWindow explained:
     // hWnd: the value returned from CreateWindowEx
     // nCmdShow: the fourth parameter from WinMain
-    ShowWindow(hWnd,
-               nCmdShow);
-    UpdateWindow(hWnd);
+    //ShowWindow(hWnd,
+    //           nCmdShow);
+    //UpdateWindow(hWnd);
+    // Popup the context menu
+    POINT pt;
+    BOOL bReturn = GetCursorPos(&pt);
+    HMENU hMenuPopup = CreatePopupMenu();
+    AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_LINE, _T("Line"));
+    AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Square"));
+    AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CIRCLE, _T("Circle"));
+    AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
+    AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CLOSE, _T("Close"));
+
+    if (bReturn == 0) //If GetCursorPos() encountered error
+    {
+        pt.x = 0;
+        pt.y = 0;
+    }
+    ClientToScreen(hWnd, &pt);
+    TrackPopupMenu(hMenuPopup,
+                   TPM_LEFTALIGN | TPM_RIGHTBUTTON,
+                   pt.x, pt.y, 0, hWnd, NULL);
+    DestroyMenu(hMenuPopup);
 
     // Main message loop:
     MSG msg;
@@ -153,7 +173,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Square"));
         AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CIRCLE, _T("Circle"));
         AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
-        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_HELP, _T("Help"));
+        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CLOSE, _T("Close"));
 
         if(bReturn == 0) //If GetCursorPos() encountered error
         {
@@ -172,7 +192,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     case WM_COMMAND:
     {
-        if (wParam >= IDM_CONTEXT_LINE && wParam <= IDM_CONTEXT_HELP)
+        if (wParam >= IDM_CONTEXT_LINE && wParam <= IDM_CONTEXT_CLOSE)
         {
             int menuItemIndex = wParam - IDM_CONTEXT_LINE;
             const char* menuItem = "";
@@ -188,8 +208,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case MenuItems::Circle:
                 msg = _T("Clicked on Circle");
                 break;
-            case MenuItems::Help:
-                msg = _T("Clicked on Help");
+            case MenuItems::Close:
+                msg = _T("Clicked on Close");
+                ExitProcess(0);
                 break;
             }
             MessageBoxW(hWnd, (LPCWSTR)msg, _T("Popup Menu"), MB_OK);
