@@ -169,11 +169,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         POINT pt;
         BOOL bReturn = GetCursorPos(&pt);
         HMENU hMenuPopup = CreatePopupMenu();
-        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_LINE, _T("Line"));
-        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Square"));
-        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CIRCLE, _T("Circle"));
-        AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
-        AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CLOSE, _T("Close"));
+        //AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_LINE, _T("Line"));
+        //AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Square"));
+        //AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CIRCLE, _T("Circle"));
+        //AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
+        //AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CLOSE, _T("Close2"));
 
         if(bReturn == 0) //If GetCursorPos() encountered error
         {
