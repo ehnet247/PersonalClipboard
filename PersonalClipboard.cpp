@@ -13,6 +13,7 @@
 #include <WinUser.h>
 #include <stdio.h>
 #include "MenuItem.h"
+//#using namespace std;
  /* Context Menu IDs */
 #define IDM_CONTEXT_LINE   1000
 #define IDM_CONTEXT_RECTAN 1001
@@ -121,13 +122,13 @@ int WINAPI WinMain(
     BOOL bReturn = GetCursorPos(&pt);
     HMENU hMenuPopup = CreatePopupMenu();
     const int arraySize = 4;
-	MenuItem MenuItems[arraySize] = { {IDM_CONTEXT_LINE, "Line"}, {IDM_CONTEXT_RECTAN, "Square"}, {IDM_CONTEXT_CIRCLE, "Circle"}, {IDM_CONTEXT_CLOSE, "Close"} };
-    
-    AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_LINE, _T("Line"));
-    AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Square"));
-    AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CIRCLE, _T("Circle"));
-    AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
-    AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CLOSE, _T("Close"));
+	MenuItem menuItems[arraySize] = { {IDM_CONTEXT_LINE, "Line"}, {IDM_CONTEXT_RECTAN, "Square"}, {IDM_CONTEXT_CIRCLE, "Circle"}, {IDM_CONTEXT_CLOSE, "Close"} };
+    for(int i = 0; i < arraySize;i++)
+    {
+        // Initializing an object of wstring
+        wstring temp = wstring(menuItems[i].Value.begin(), menuItems[i].Value.end());
+        AppendMenu(hMenuPopup, MF_STRING, menuItems[i].Id, temp.c_str());
+    }
 
     if (bReturn == 0) //If GetCursorPos() encountered error
     {
