@@ -12,6 +12,7 @@
 #include <tchar.h>
 #include <WinUser.h>
 #include <stdio.h>
+#include "MenuItem.h"
  /* Context Menu IDs */
 #define IDM_CONTEXT_LINE   1000
 #define IDM_CONTEXT_RECTAN 1001
@@ -30,6 +31,12 @@ static TCHAR szTitle[] = _T("Personal Clipboard Application");
 
 // Stored instance handle for use in Win32 API calls such as FindResource
 HINSTANCE hInst;
+struct Company {
+    string name;
+    string ceo;
+    float income;
+    int employees;
+};
 
 // Forward declarations of functions included in this code module:
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -113,6 +120,9 @@ int WINAPI WinMain(
     POINT pt;
     BOOL bReturn = GetCursorPos(&pt);
     HMENU hMenuPopup = CreatePopupMenu();
+    const int arraySize = 4;
+	MenuItem MenuItems[arraySize] = { {IDM_CONTEXT_LINE, "Line"}, {IDM_CONTEXT_RECTAN, "Square"}, {IDM_CONTEXT_CIRCLE, "Circle"}, {IDM_CONTEXT_CLOSE, "Close"} };
+    
     AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_LINE, _T("Line"));
     AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_RECTAN, _T("Square"));
     AppendMenu(hMenuPopup, MF_STRING, IDM_CONTEXT_CIRCLE, _T("Circle"));
