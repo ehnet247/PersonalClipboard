@@ -12,7 +12,10 @@
 #include <tchar.h>
 #include <WinUser.h>
 #include <stdio.h>
+#include <shlobj_core.h>
+#include <shlwapi.h>
 #include "MenuItem.h"
+#pragma comment(lib, "shlwapi.lib")
 //#using namespace std;
  /* Context Menu IDs */
 #define IDM_CONTEXT_LINE   1000
@@ -74,6 +77,19 @@ int WINAPI WinMain(
         return 1;
     }
 
+    // Read the application data local folder path
+    TCHAR szPath[MAX_PATH];
+
+    if (SUCCEEDED(SHGetFolderPath(NULL,
+                                  CSIDL_LOCAL_APPDATA | CSIDL_FLAG_CREATE,
+                                  NULL,
+                                  0,
+                                  szPath)))
+    {
+		PathCombine(szPath, szPath, TEXT("PersonalClipboard"));
+		PathCombine(szPath, szPath, TEXT("PersonalClipboardData.txt"));
+        //HANDLE hFile = CreateFile(szPath, ...);
+    }
     // Store instance handle in our global variable
     hInst = hInstance;
 
@@ -117,6 +133,7 @@ int WINAPI WinMain(
     //ShowWindow(hWnd,
     //           nCmdShow);
     //UpdateWindow(hWnd);
+    
     // Popup the context menu
     POINT pt;
     BOOL bReturn = GetCursorPos(&pt);
