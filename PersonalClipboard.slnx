@@ -1,7 +1,12 @@
 <Solution>
   <Configurations>
+    <Platform Name="Any CPU" />
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="ClipboardConfigForm/ClipboardConfigForm.csproj" Id="b902bc26-29b6-487d-b8bd-a9e2dc4d0cfd" />
+  <Project Path="ClipboardDataManager/ClipboardData.csproj" Id="68a544f7-3aad-40d9-8c16-18c9508fb0e1" />
+  <Project Path="MfcPersonalClipboard/MfcPersonalClipboard.vcxproj" />
   <Project Path="PersonalClipboard.vcxproj" Id="6041897c-e232-45bc-a447-0795c65ced85" />
+  <Project Path="WinFormsPersonalClipboard/WinFormsPersonalClipboard.csproj" Id="090748a9-242f-4012-9f5f-41ccb9143655" />
 </Solution>

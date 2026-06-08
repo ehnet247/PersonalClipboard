@@ -1,0 +1,54 @@
+<local:MyWindow x:Class="ClipboardConfigForm.Views.ConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClipboardConfigForm.Views"
+        xmlns:vm="clr-namespace:ClipboardConfigForm.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Title="Personal Clipboard Configuration" Busy="{Binding Busy, Mode=TwoWay}">
+    <DockPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <Label Content="Phrases:"/>
+                <ListView ItemsSource="{Binding Phrases}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            </StackPanel>
+            <Grid Grid.Column="1">
+                <GroupBox Header="Edition">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Content="Name:"/>
+                            <TextBox Text="{Binding SelectedPhrase.Name}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <Label Content="Text:"/>
+                            <TextBox Text="{Binding SelectedPhrase.Phrase}"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </Grid>
+        <!-- Buttons docked at the bottom -->
+        <UniformGrid Columns="3" Rows="1" DockPanel.Dock="Bottom" Height="30" Margin="5" VerticalAlignment="Bottom">
+            <Button Content="New" Command="{Binding NewCommand}" Width="80"/>
+            <Button Content="Validate" Command="{Binding ValidateCommand}" Width="80"/>
+            <Button Content="Close" Command="{Binding CloseCommand}" Click="CloseButton_Click" Width="80"/>
+        </UniformGrid>
+    </DockPanel>
+</local:MyWindow>
