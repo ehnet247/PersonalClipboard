@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <shlobj_core.h>
 #include <shlwapi.h>
+//#include <afx.h>
+//#include <file.h>
 #include "MenuItem.h"
 #pragma comment(lib, "shlwapi.lib")
 //#using namespace std;
@@ -26,6 +28,8 @@
 enum MenuItems { Line, Square, Circle, Close };
 
 // Global variables
+const int arraySize = 4;
+MenuItem menuItems[arraySize] = { {IDM_CONTEXT_LINE, "Line"}, {IDM_CONTEXT_RECTAN, "Square"}, {IDM_CONTEXT_CIRCLE, "Circle"}, {IDM_CONTEXT_CLOSE, "Close"} };
 
 // The main window class name.
 static TCHAR szWindowClass[] = _T("DesktopApp");
@@ -88,7 +92,6 @@ int WINAPI WinMain(
     {
 		PathCombine(szPath, szPath, TEXT("PersonalClipboard"));
 		PathCombine(szPath, szPath, TEXT("PersonalClipboardData.txt"));
-        //HANDLE hFile = CreateFile(szPath, ...);
     }
     // Store instance handle in our global variable
     hInst = hInstance;
@@ -138,8 +141,7 @@ int WINAPI WinMain(
     POINT pt;
     BOOL bReturn = GetCursorPos(&pt);
     HMENU hMenuPopup = CreatePopupMenu();
-    const int arraySize = 4;
-	MenuItem menuItems[arraySize] = { {IDM_CONTEXT_LINE, "Line"}, {IDM_CONTEXT_RECTAN, "Square"}, {IDM_CONTEXT_CIRCLE, "Circle"}, {IDM_CONTEXT_CLOSE, "Close"} };
+	
     for(int i = 0; i < arraySize;i++)
     {
         // Initializing an object of wstring
