@@ -8,47 +8,57 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Title="Personal Clipboard Configuration" Busy="{Binding Busy, Mode=TwoWay}">
-    <DockPanel>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <!-- Row 0, column 0: Phrase list -->
+        <Grid Grid.Row="0" Grid.Column="0">
+            <StackPanel>
                 <Label Content="Phrases:"/>
-                <ListView ItemsSource="{Binding Phrases}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <Button Content="+" Command="{Binding AddCommand}" MaxWidth="40" Margin="0,0,2,0"/>
+                        <Button Content="-" Command="{Binding RemCommand}" MaxWidth="40" Margin="2,0,0,0"/>
+                    </StackPanel>
+                    <ListView ItemsSource="{Binding Phrases}" SelectedItem="{Binding SelectedPhrase}" Grid.Row="1">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
             </StackPanel>
-            <Grid Grid.Column="1">
-                <GroupBox Header="Edition">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <Label Content="Name:"/>
-                            <TextBox Text="{Binding SelectedPhrase.Name}"/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="1">
-                            <Label Content="Text:"/>
-                            <TextBox Text="{Binding SelectedPhrase.Phrase}"/>
-                        </StackPanel>
-                    </Grid>
-                </GroupBox>
-            </Grid>
         </Grid>
-        <!-- Buttons docked at the bottom -->
-        <UniformGrid Columns="3" Rows="1" DockPanel.Dock="Bottom" Height="30" Margin="5" VerticalAlignment="Bottom">
-            <Button Content="New" Command="{Binding NewCommand}" Width="80"/>
-            <Button Content="Validate" Command="{Binding ValidateCommand}" Width="80"/>
-            <Button Content="Close" Command="{Binding CloseCommand}" Click="CloseButton_Click" Width="80"/>
-        </UniformGrid>
-    </DockPanel>
+        <!-- Row 0, column 1: Phrase edition -->
+        <Grid Grid.Row="0" Grid.Column="1">
+            <GroupBox Header="Edition">
+                <StackPanel>
+                    <Label Content="Name:"/>
+                    <TextBox Text="{Binding PhraseNameEditing}"  Width="100" HorizontalAlignment="Left"/>
+                    <Label Content="Text:"/>
+                    <TextBox Text="{Binding PhraseContentEditing}" Width="Auto" MinWidth="200" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+        <!-- Row 1, columns 0 & 1:Button bar-->
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+            <Separator Margin="0,5,0,0"/>
+            <UniformGrid Columns="3" Rows="1" Height="30" Margin="5" VerticalAlignment="Bottom">
+                <Button Content="Validate" Command="{Binding ValidateCommand}" Background="Turquoise"  Width="80"/>
+                <Button Content="New" Visibility="Hidden" Width="80"/>
+                <Button Content="Close" Click="CloseButton_Click" Command="{Binding CloseCommand}" Background="White" Width="80"/>
+            </UniformGrid>
+        </StackPanel>
+    </Grid>
 </local:MyWindow>

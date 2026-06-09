@@ -6,7 +6,6 @@ namespace ClipboardData
     public class ClipboardDataManager : IClipboardDataManager
     {
         public Data? ClipboardData { get; set; }
-        private readonly string _filename;
         private readonly string _dataFileName = "Clipboard.data";
         public ClipboardDataManager()
         {
@@ -17,12 +16,12 @@ namespace ClipboardData
         public int TryReadData()
         {
             // Read the data file
-            if (File.Exists(_filename))
+            if (File.Exists(_dataFileName))
             {
                 string fileContent = string.Empty;
                 try
                 {
-                    fileContent = File.ReadAllText(_filename);
+                    fileContent = File.ReadAllText(_dataFileName);
                 }
                 catch (IOException ex)
                 {
@@ -37,7 +36,6 @@ namespace ClipboardData
                     // Create an ObservableCollection from the deserialized PhraseList
                     if (ClipboardData != null)
                     {
-                        ClipboardData.Phrases = new ObservableCollection<PhraseStruct>(ClipboardData.PhraseList);
                         // Indicate success
                         return 0;
                     }
@@ -67,7 +65,7 @@ namespace ClipboardData
                 string jsonData = JsonSerializer.Serialize(ClipboardData);
                 try
                 {
-                    File.WriteAllText(_filename, jsonData);
+                    File.WriteAllText(_dataFileName, jsonData);
                 }
                 catch (IOException ex)
                 {

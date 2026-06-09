@@ -8,7 +8,6 @@ namespace ClipboardConfigForm
 {
     public interface IConfigViewModel
     {
-        PhraseStruct SelectedPhrase { get; set; }
         List<PhraseStruct>? PhraseList { get; }
     }
 }
