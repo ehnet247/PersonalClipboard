@@ -21,5 +21,6 @@ namespace ClipboardData
     {
         public string Content { get; set; }
         public string Name { get; set; }
+        public bool IsSecret { get; set; }
     }
 }

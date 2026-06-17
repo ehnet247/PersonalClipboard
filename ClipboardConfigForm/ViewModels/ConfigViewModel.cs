@@ -14,16 +14,22 @@ namespace ClipboardConfigForm.ViewModels
     {
         private readonly IClipboardDataManager? _dataManager;
         [ObservableProperty]
-        private string phraseNameEditing = string.Empty;
-        partial void OnPhraseNameEditingChanged(string value)
+        private string editingPhraseName = string.Empty;
+        partial void OnEditingPhraseNameChanged(string value)
         {
             Debug.WriteLine($"Phrase name changed to: {value}");
         }
         [ObservableProperty]
-        private string phraseContentEditing = string.Empty;
-        partial void OnPhraseContentEditingChanged(string value)
+        private string editingPhraseContent = string.Empty;
+        partial void OnEditingPhraseContentChanged(string value)
         {
             Debug.WriteLine($"Phrase content changed to: {value}");
+        }
+        [ObservableProperty]
+        private bool editingPhraseIsSecret = false;
+        partial void OnEditingPhraseIsSecretChanged(bool value)
+        {
+            Debug.WriteLine($"Phrase IsSecret changed to: {value}");
         }
         [ObservableProperty]
         private bool busy = false;
@@ -34,8 +40,9 @@ namespace ClipboardConfigForm.ViewModels
             var selectedPhrase = value as PhraseStruct?;
             if (selectedPhrase != null)
             {
-                PhraseNameEditing = selectedPhrase.Value.Name;
-                PhraseContentEditing = selectedPhrase.Value.Content;
+                EditingPhraseName = selectedPhrase.Value.Name;
+                EditingPhraseContent = selectedPhrase.Value.Content;
+                EditingPhraseIsSecret = selectedPhrase.Value.IsSecret;
             }
         }
         private bool _needToSave = false;
@@ -44,14 +51,15 @@ namespace ClipboardConfigForm.ViewModels
         private void Add()
         {
             _newPhrase = true;
-            PhraseNameEditing = "New Phrase";
-            PhraseContentEditing = string.Empty;
+            EditingPhraseName = "New Phrase";
+            EditingPhraseContent = string.Empty;
+            EditingPhraseIsSecret = false;
         }
 
         private void Rem()
-        {if (!string.IsNullOrEmpty(PhraseNameEditing))
+        {if (!string.IsNullOrEmpty(EditingPhraseName))
             {
-                var existingPhrase = _dataManager!.ClipboardData!.Phrases.SingleOrDefault(p => p.Name == PhraseNameEditing);
+                var existingPhrase = _dataManager!.ClipboardData!.Phrases.SingleOrDefault(p => p.Name == EditingPhraseName);
                 if (!string.IsNullOrEmpty(existingPhrase.Name))
                 {
                     _dataManager.ClipboardData!.Phrases.Remove(existingPhrase);
@@ -63,14 +71,15 @@ namespace ClipboardConfigForm.ViewModels
         [RelayCommand]
         private void Validate()
         {
-            var existingPhrase = _dataManager!.ClipboardData!.Phrases.SingleOrDefault(p => p.Name == PhraseNameEditing);
+            var existingPhrase = _dataManager!.ClipboardData!.Phrases.SingleOrDefault(p => p.Name == EditingPhraseName);
             // If the phrase already exists, update it
             if (!string.IsNullOrEmpty(existingPhrase.Name))
             {
                 if (!_newPhrase)
                 {
-                    if (existingPhrase.Name != PhraseNameEditing ||
-                        existingPhrase.Content != PhraseContentEditing)
+                    if (existingPhrase.Name != EditingPhraseName ||
+                        existingPhrase.Content != EditingPhraseContent ||
+                        existingPhrase.IsSecret != EditingPhraseIsSecret)
                     {
                         for (int i = 0; i < _dataManager.ClipboardData!.Phrases.Count; i++)
                         {
@@ -78,8 +87,9 @@ namespace ClipboardConfigForm.ViewModels
                             {
                                 _dataManager.ClipboardData.Phrases[i] = new PhraseStruct
                                 {
-                                    Name = PhraseNameEditing,
-                                    Content = PhraseContentEditing
+                                    Name = EditingPhraseName,
+                                    Content = EditingPhraseContent,
+                                    IsSecret = EditingPhraseIsSecret
                                 };
                                 break;
                             }
@@ -100,8 +110,9 @@ namespace ClipboardConfigForm.ViewModels
                 _newPhrase = false;
                 PhraseStruct newPhrase = new PhraseStruct
                 {
-                    Name = PhraseNameEditing,
-                    Content = PhraseContentEditing
+                    Name = EditingPhraseName,
+                    Content = EditingPhraseContent,
+                    IsSecret = EditingPhraseIsSecret
                 };
                 _dataManager.ClipboardData!.Phrases.Add(newPhrase);
                 _needToSave = true;

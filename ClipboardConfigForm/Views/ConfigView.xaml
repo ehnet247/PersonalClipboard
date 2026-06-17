@@ -45,9 +45,10 @@
             <GroupBox Header="Edition">
                 <StackPanel>
                     <Label Content="Name:"/>
-                    <TextBox Text="{Binding PhraseNameEditing}"  Width="100" HorizontalAlignment="Left"/>
+                    <TextBox Text="{Binding EditingPhraseName}"  Width="100" HorizontalAlignment="Left"/>
                     <Label Content="Text:"/>
-                    <TextBox Text="{Binding PhraseContentEditing}" Width="Auto" MinWidth="200" HorizontalAlignment="Left"/>
+                    <TextBox Text="{Binding EditingPhraseContent}" Width="Auto" MinWidth="200" HorizontalAlignment="Left"/>
+                    <CheckBox Content="Secret" IsChecked="{Binding EditingPhraseIsSecret}" HorizontalAlignment="Left"/>
                 </StackPanel>
             </GroupBox>
         </Grid>
