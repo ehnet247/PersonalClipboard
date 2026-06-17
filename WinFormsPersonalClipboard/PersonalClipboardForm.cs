@@ -61,6 +61,19 @@ namespace WinFormsPersonalClipboard
                     ToolStripDropDownButton phraseButton = new ToolStripDropDownButton(phrase.Name, null, null, "Close");
                 }
             }
+            foreach(var phrase in _dataManager.ClipboardData!.Phrases)
+            {
+                ToolStripDropDownButton phraseButton = new ToolStripDropDownButton(phrase.Name, null, null, "Phrase");
+                phraseButton.ShowDropDownArrow = false;
+                phraseButton.Click += (s, ev) =>
+                {
+                    // Copy the phrase content to the clipboard
+                    System.Windows.Forms.Clipboard.SetText(phrase.Content);
+                    // Close the form after copying
+                    this.Close();
+                };
+                ms.Items.Add(phraseButton);
+            }
             ms.Items.Add(configButton);
             ms.Items.Add(closeButton);
             ms.Dock = DockStyle.Fill;

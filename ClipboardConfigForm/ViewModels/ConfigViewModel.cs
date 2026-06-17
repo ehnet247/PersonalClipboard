@@ -69,11 +69,21 @@ namespace ClipboardConfigForm.ViewModels
             {
                 if (!_newPhrase)
                 {
-                    if (existingPhrase.Name != PhraseNameEditing &&
+                    if (existingPhrase.Name != PhraseNameEditing ||
                         existingPhrase.Content != PhraseContentEditing)
                     {
-                        existingPhrase.Name = PhraseNameEditing;
-                        existingPhrase.Content = PhraseContentEditing;
+                        for (int i = 0; i < _dataManager.ClipboardData!.Phrases.Count; i++)
+                        {
+                            if (_dataManager.ClipboardData.Phrases[i].Name == existingPhrase.Name)
+                            {
+                                _dataManager.ClipboardData.Phrases[i] = new PhraseStruct
+                                {
+                                    Name = PhraseNameEditing,
+                                    Content = PhraseContentEditing
+                                };
+                                break;
+                            }
+                        }
                         _needToSave = true;
                         NotifyPhraseListChanged();
                     }
