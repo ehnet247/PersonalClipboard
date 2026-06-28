@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:ClipboardConfigForm.Views"
         xmlns:vm="clr-namespace:ClipboardConfigForm.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="450" d:DesignWidth="600"
+                Height="400" Width="600"
              Title="Personal Clipboard Configuration" Busy="{Binding Busy, Mode=TwoWay}">
     <Grid>
         <Grid.RowDefinitions>
