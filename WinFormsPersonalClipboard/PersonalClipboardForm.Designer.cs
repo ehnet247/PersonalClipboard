@@ -38,6 +38,7 @@
             FormBorderStyle = FormBorderStyle.None;
             Name = "PersonalClipboardForm";
             Opacity = 0D;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.Manual;
             Text = "PersonalClipboard";
             TopMost = true;

@@ -34,27 +34,20 @@ namespace WinFormsPersonalClipboard
             };
             autoCloseTimer.Start();
             ContextMenuStrip ms = new ContextMenuStrip();
-            int maxCharCount = 0;
             
             if (_dataManager!.ClipboardData!.Phrases != null)
             {
                 foreach (var phrase in _dataManager.ClipboardData!.Phrases)
                 {
-                    if (phrase.Name.Length > maxCharCount)
-                        maxCharCount = phrase.Name.Length;
-                }
-                foreach (var phrase in _dataManager.ClipboardData!.Phrases)
-                {
                     string buttonText = phrase.Name;
-                    while (buttonText.Length < maxCharCount)
-                    {
-                        buttonText += "_";
-                    }
                     ToolStripButton phraseButton = new ToolStripButton(buttonText, null, null, "Phrase");
+                    phraseButton.TextAlign = ContentAlignment.BottomLeft;
                     phraseButton.Width = 100;
+                    phraseButton.Padding = Padding.Empty;
                     phraseButton.AutoSize = false;
+                    phraseButton.ImageAlign = ContentAlignment.BottomLeft;
                     if (phrase.IsSecret)
-                        phraseButton.BackColor = System.Drawing.Color.Orange;
+                        phraseButton.BackColor = System.Drawing.Color.Yellow;
                     else
                         phraseButton.BackColor = System.Drawing.Color.DeepSkyBlue;
                     phraseButton.Click += (s, ev) =>
@@ -68,12 +61,12 @@ namespace WinFormsPersonalClipboard
                 }
             }
             ToolStripButton configButton = new ToolStripButton("Config", null, null, "Config");
+            configButton.TextAlign = ContentAlignment.BottomLeft;
             configButton.Width = 100;
+            configButton.Padding = Padding.Empty;
             configButton.AutoSize = false;
-            while (configButton.Text.Length < maxCharCount)
-            {
-                configButton.Text += "_";
-            }
+            configButton.ImageAlign = ContentAlignment.BottomLeft;
+            configButton.BackColor = System.Drawing.Color.LightGray;
             configButton.Width = 100;
             configButton.Click += (s, ev) =>
             {
@@ -91,14 +84,13 @@ namespace WinFormsPersonalClipboard
                 System.Windows.Forms.Application.Exit();
             };
             ToolStripButton closeButton = new ToolStripButton("Close", null, null, "Close");
+            closeButton.TextAlign = ContentAlignment.BottomLeft;
             closeButton.Width = 100;
+            closeButton.Padding = Padding.Empty;
             closeButton.AutoSize = false;
+            closeButton.ImageAlign = ContentAlignment.BottomLeft;
             closeButton.BackColor = System.Drawing.Color.OrangeRed;
             closeButton.Click += (s, ev) => this.Close();
-            while (closeButton.Text.Length < maxCharCount)
-            {
-                closeButton.Text += "_";
-            }
             ms.Items.Add(configButton);
             ms.Items.Add(closeButton);
             ms.Dock = DockStyle.Fill;
