@@ -26,7 +26,7 @@ namespace WinFormsPersonalClipboard
             if (rootForm != null)
                 Application.Run(rootForm);
         }
-        public static IServiceProvider ServiceProvider { get; private set; }
+        public static IServiceProvider? ServiceProvider { get; private set; }
         static IHostBuilder CreateHostBuilder()
         {
             return Host.CreateDefaultBuilder()
