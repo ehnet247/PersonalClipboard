@@ -11,6 +11,7 @@ namespace WinFormsPersonalClipboard
     public partial class PersonalClipboardForm : Form, IRootForm
     {
         private readonly IClipboardDataManager? _dataManager;
+        private System.Windows.Forms.Timer? _autoCloseTimer;
         public PersonalClipboardForm(IClipboardDataManager dataManager)
         {
             _dataManager = dataManager;
@@ -25,14 +26,14 @@ namespace WinFormsPersonalClipboard
         {
             this.Location = Cursor.Position;
             // Setup auto-close timer
-            var autoCloseTimer = new System.Windows.Forms.Timer();
-            autoCloseTimer.Interval = 60000; // 60 seconds
-            autoCloseTimer.Tick += (s, ev) =>
+            _autoCloseTimer = new System.Windows.Forms.Timer();
+            _autoCloseTimer.Interval = 30000; // 30 seconds
+            _autoCloseTimer.Tick += (s, ev) =>
             {
-                autoCloseTimer.Dispose();
+                _autoCloseTimer.Dispose();
                 this.Close();
             };
-            autoCloseTimer.Start();
+            _autoCloseTimer.Start();
             ContextMenuStrip ms = new ContextMenuStrip();
             
             if (_dataManager!.ClipboardData!.Phrases != null)
@@ -70,7 +71,6 @@ namespace WinFormsPersonalClipboard
             configButton.Width = 100;
             configButton.Click += (s, ev) =>
             {
-                //var configForm = new ConfigView();
                 var configView = Program.ServiceProvider.GetRequiredService<IConfigView>();
                 var configViewModel = Program.ServiceProvider.GetRequiredService<IConfigViewModel>();
                 var configWindow = configView as Window;
@@ -79,6 +79,11 @@ namespace WinFormsPersonalClipboard
                     if (configViewModel == null)
                         throw new InvalidOperationException("ConfigViewModel is not registered in the service provider.");
                     configWindow.DataContext = configViewModel;
+                    // Stop the autoclose timer because it could take time to enter new phrases in the config window
+                    if (_autoCloseTimer != null)
+                    {
+                        _autoCloseTimer.Stop();
+                    }
                     configWindow.ShowDialog();
                 }
                 System.Windows.Forms.Application.Exit();
