@@ -56,6 +56,7 @@ namespace ClipboardConfigForm.ViewModels
             EditingPhraseIsSecret = false;
         }
 
+        [RelayCommand]
         private void Rem()
         {if (!string.IsNullOrEmpty(EditingPhraseName))
             {
